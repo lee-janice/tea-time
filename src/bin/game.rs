@@ -119,7 +119,7 @@ fn get_rooms() -> [Room; 4] {
         Room {
             name: "Kitchen",
             desc:
-                "A full moon glow illuminates the room from the window above the sink. Various items lay on the kitchen counter. The door to the living room lies to the west.",
+                "A full moon glow illuminates the room from the window above the sink. Beside the window is a cupboard full of kitchenware. Various items lay on the kitchen counter. The door to the living room lies to the west.",
             doors: vec![Door {
                 target: RoomID(0),
                 direction: "west",
