@@ -1,6 +1,5 @@
-use crate::command::CommandResult;
-use crate::entity::Inventory;
 use crate::entity::Object;
+use crate::inventory::Inventory;
 use crate::room::Room;
 use crate::room::RoomID;
 
@@ -13,6 +12,9 @@ pub struct Player {
 }
 
 impl Player {
+    /// -------------------------
+    /// methods for room/location
+    /// -------------------------
     pub fn get_curr_room<'a, 'b>(&'a self, rooms: &'b [Room]) -> &'b Room {
         &rooms[self.at.0]
     }
@@ -21,30 +23,8 @@ impl Player {
         &mut rooms[self.at.0]
     }
 
-    pub fn go(&mut self, direction: &str, rooms: &[Room]) -> CommandResult {
-        let door = self.get_curr_room(rooms).get_door(direction);
-        match door {
-            Some(door) => {
-                if door.is_open {
-                    self.at = door.target;
-                    let door_msg = door.msg_on_open.unwrap_or_default().to_owned();
-                    let room_msg = self.get_curr_room(rooms).desc.to_owned();
-                    let msg = if door_msg.is_empty() {
-                        room_msg
-                    } else {
-                        [door_msg, room_msg].join("\n")
-                    };
-                    CommandResult { message: msg }
-                } else {
-                    CommandResult {
-                        message: door.msg_on_closed.unwrap_or_default().to_owned(),
-                    }
-                }
-            }
-            None => CommandResult {
-                message: "You can't go that way.".to_owned(),
-            },
-        }
+    pub fn go(&mut self, room_id: RoomID) {
+        self.at = room_id;
     }
 
     pub fn list_objects(&self) -> String {
@@ -54,6 +34,13 @@ impl Player {
             .map(|o| o.name)
             .collect::<Vec<&'static str>>()
             .join("\n\t- ")
+    }
+
+    /// -----------------------------
+    /// methods for inventory/objects
+    /// -----------------------------
+    pub fn has(&self, object_name: &str) -> bool {
+        self.inventory.contains(object_name)
     }
 
     pub fn find_object(&self, object_name: &str) -> Option<&Object> {
@@ -68,7 +55,7 @@ impl Player {
         self.inventory.add(object);
     }
 
-    pub fn has(&self, object_name: &str) -> bool {
-        self.inventory.contains(object_name)
+    pub fn remove(&mut self, object_name: &str) -> Option<Object> {
+        self.inventory.remove(object_name)
     }
 }

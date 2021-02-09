@@ -1,7 +1,7 @@
 use crate::command::Command;
 
-const HELPER_WORDS: [&str; 6] = ["a", "an", "the", "at", "to", "go"];
-const PREPOSITIONS: [&str; 3] = ["in", "into", "for"];
+const HELPER_WORDS: [&str; 7] = ["a", "an", "the", "at", "to", "go", "of"];
+const PREPOSITIONS: [&str; 4] = ["in", "into", "for", "inside"];
 const DIRECTIONS: [&str; 8] = ["north", "n", "south", "s", "east", "e", "west", "w"];
 
 #[derive(Clone, Debug)]

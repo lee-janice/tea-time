@@ -1,6 +1,8 @@
-use crate::entity::Character;
-use crate::entity::Inventory;
+use crate::character::Character;
+use crate::door::Door;
 use crate::entity::Object;
+use crate::inventory::Inventory;
+use crate::util::get_room_name_border;
 
 pub struct Room {
     pub name: &'static str,
@@ -11,8 +13,20 @@ pub struct Room {
 }
 
 impl Room {
+    pub fn get_display_name(&self) -> String {
+        let border = get_room_name_border();
+        format!("{}\n{}\n{}", border, self.name, border)
+    }
+
     pub fn get_door(&self, direction: &str) -> Option<&Door> {
         self.doors.iter().find(|door| door.direction == direction)
+    }
+
+    /// -----------------------------
+    /// methods for inventory/objects
+    /// -----------------------------
+    pub fn has(&self, object_name: &str) -> bool {
+        self.inventory.contains(object_name)
     }
 
     pub fn find_object(&self, name: &str) -> Option<&Object> {
@@ -23,21 +37,17 @@ impl Room {
         self.inventory.find_object_mut(name)
     }
 
-    pub fn find_object_pos(&self, name: &str) -> Option<usize> {
-        self.inventory.find_object_pos(name)
+    pub fn remove(&mut self, name: &str) -> Option<Object> {
+        self.inventory.remove(name)
     }
 
-    // // Need this because find_object borrows self.inventory immutably
-    // pub fn find_object_clone(&self, name: &str) -> Option<Item> {
-    //   let result = self.inventory.iter().find(|object| object.name == name);
-    //   match result {
-    //     Some(object) => Some(object.clone()),
-    //     None => None,
-    //   }
-    // }
-
-    pub fn give_object(&mut self, name: &str) -> Option<Object> {
-        self.inventory.give_object(name)
+    /// ----------------------
+    /// methods for characters
+    /// ----------------------
+    pub fn find_character(&self, name: &str) -> Option<&Character> {
+        self.characters
+            .iter()
+            .find(|character| character.name == name)
     }
 
     pub fn find_character_mut(&mut self, name: &str) -> Option<&mut Character> {
@@ -45,32 +55,7 @@ impl Room {
             .iter_mut()
             .find(|character| character.name == name)
     }
-
-    pub fn has(&self, object_name: &str) -> bool {
-        self.inventory.contains(object_name)
-    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct RoomID(pub usize);
-
-#[derive(Debug)]
-pub struct Door {
-    pub target: RoomID,
-    pub direction: &'static str,
-    pub is_open: bool,
-    pub msg_on_open: Option<&'static str>,
-    pub msg_on_closed: Option<&'static str>,
-}
-
-impl Default for Door {
-    fn default() -> Door {
-        Door {
-            target: RoomID(0),
-            direction: "",
-            is_open: true,
-            msg_on_open: None,
-            msg_on_closed: None,
-        }
-    }
-}
