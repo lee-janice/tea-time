@@ -142,7 +142,7 @@ fn get_rooms() -> [Room; 4] {
                     direction: "north",
                     is_open: false,
                     msg_on_open: Some("You knock hesitantly. As soon as your hand makes contact with the door, it slowly creaks open."),
-                    msg_on_closed: Some("A note is on the door. It reads `I'll be back at 11:00pm.`"),
+                    msg_on_closed: Some("A note is on the door. It reads `I'll be back at 10:00pm.`"),
                 },
             ],
             inventory: Inventory::default(),
@@ -170,7 +170,7 @@ fn get_rooms() -> [Room; 4] {
                         ..Default::default()
                     }],
                 },
-                on_talk: "You ask the cat if it can talk. It stares at you for a while, and just as you were about to give up, you hear it speak. `Hi, I suppose you're here for some sugar?`",
+                on_talk: "You ask the cat if it can talk. It stares at you for a while, and just as you were about to give up, you hear it speak. `Hi, I suppose you're here for some sugar? Why don't you just ASK?`",
                 on_talk_again: "The cat seems to be preoccupied with trying to catch its own tail. You think it's best not to bother it.",
                 on_ask: "The cat thinks for a moment. `I was saving this sugar for a special moment, but I guess this is as good as any.` The cat takes out some sugar cubes. `Good luck with your tea!`",
                 has_interacted: false,
